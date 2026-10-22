@@ -2,8 +2,7 @@
 
 Proyecto de práctica: CRUD de especialidades médicas con arquitectura en capas
 (repository → service), PostgreSQL, Drizzle ORM y tests unitarios.
-Armado como ejercicio de aprendizaje, siguiendo la arquitectura de un TP de cátedra (Sistema de turnos médicos)
-
+Armado como ejercicio de aprendizaje, siguiendo la arquitectura de un sistema de turnos médicos hecho para la cátedra Desarrollo de Software.
 ## Stack
 Node.js, TypeScript, PostgreSQL, Drizzle ORM, `node:test`.
 
