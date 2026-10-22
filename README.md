@@ -1,8 +1,8 @@
 # CRUD de especialidades
 
-Proyecto de práctica: CRUD con arquitectura en capas
+Proyecto de práctica: CRUD de especialidades médicas con arquitectura en capas
 (repository → service), PostgreSQL, Drizzle ORM y tests unitarios.
-Armado como ejercicio de aprendizaje, siguiendo la arquitectura de un TP de cátedra.
+Armado como ejercicio de aprendizaje, siguiendo la arquitectura de un TP de cátedra (Sistema de turnos médicos)
 
 ## Stack
 Node.js, TypeScript, PostgreSQL, Drizzle ORM, `node:test`.
