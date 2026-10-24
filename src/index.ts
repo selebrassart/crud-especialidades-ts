@@ -1,15 +1,18 @@
 import { pool } from "./db.ts"
 import { especialidadService } from "./services/container.ts"
+import { sanitizeEspecialidadInput } from "./validations/EspecialidadValidation.ts"
 
 const [comando, ...args] = process.argv.slice(2)
 
 try {
   switch (comando) {
     case "crear": {
-      const [nombre, descripcion] = args
-      console.log(await especialidadService.create({ nombre, descripcion }))
-      break
-    }
+  const [nombre, descripcion] = args
+  const input = sanitizeEspecialidadInput({ nombre, descripcion })
+  console.log(await especialidadService.create(input))
+  break
+     }
+    
     case "listar":
       console.table(await especialidadService.findAll())
       break
@@ -18,6 +21,7 @@ try {
       break
     case "editar": {
       const [id, nombre, descripcion] = args
+       const input = sanitizeEspecialidadInput({ nombre, descripcion })
       console.log(await especialidadService.update(id, { nombre, descripcion }))
       break
     }
