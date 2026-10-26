@@ -2,7 +2,20 @@ import assert from "node:assert/strict"
 import { beforeEach, describe, it } from "node:test"
 import type { Especialidad } from "../src/models/Especialidad.ts"
 import { EspecialidadService } from "../src/services/EspecialidadService.ts"
+import type { Medico } from "../src/models/Medico.ts"
 
+class FakeMedicoRepository {
+  items: Medico[] = []
+
+  async countByEspecialidad(especialidadId: string) {
+    return this.items.filter((item) => item.especialidadId === especialidadId).length
+  }
+
+  async create(item: Medico) {
+    this.items.push(item)
+    return item
+  }
+}
 class FakeEspecialidadRepository {
   items: Especialidad[] = []
 
@@ -32,10 +45,12 @@ class FakeEspecialidadRepository {
 describe("EspecialidadService", () => {
   let repo: FakeEspecialidadRepository
   let service: EspecialidadService
+  let medicoRepo: FakeMedicoRepository
 
   beforeEach(() => {
     repo = new FakeEspecialidadRepository()
-    service = new EspecialidadService(repo)
+     medicoRepo = new FakeMedicoRepository()
+    service = new EspecialidadService(repo, medicoRepo)
   })
 
   it("crea una especialidad y limpia los espacios", async () => {
@@ -98,5 +113,38 @@ describe("EspecialidadService", () => {
     it("rechaza borrar una especialidad que no existe", async () => {
       await assert.rejects(() => service.remove("id-inexistente"), /no existe/)
     })
+
+    it("rechaza borrar una especialidad que tiene médicos", async () => {
+  const cardio = await service.create({ nombre: "Cardiología" })
+  await medicoRepo.create({ id: "m1", nombre: "Dra. Gómez", especialidadId: cardio.id })
+
+  await assert.rejects(() => service.remove(cardio.id), /médicos asignados/)
+
+  assert.equal(repo.items.length, 1)   // no se borró
+})
+
+it("no se bloquea por médicos de OTRA especialidad", async () => {
+  const cardio = await service.create({ nombre: "Cardiología" })
+  const pediatria = await service.create({ nombre: "Pediatría" })
+  await medicoRepo.create({ id: "m1", nombre: "Dra. Gómez", especialidadId: cardio.id })
+
+  await service.remove(pediatria.id)
+
+  assert.equal(repo.items.length, 1)              // quedó una sola especialidad
+  assert.equal(repo.items[0].id, cardio.id)       // y es Cardiología
+})
+it("permite borrar cuando ya no tiene médicos", async () => {
+  const cardio = await service.create({ nombre: "Cardiología" })
+  await medicoRepo.create({ id: "m1", nombre: "Dra. Gómez", especialidadId: cardio.id })
+
+  await assert.rejects(() => service.remove(cardio.id), /médicos asignados/)
+
+  medicoRepo.items = []        // "vaciar" la lista = el médico ya no existe
+
+  await service.remove(cardio.id)
+  assert.equal(repo.items.length, 0)
+})
   })
 })
+
+
