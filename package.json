@@ -10,7 +10,9 @@
     "start": "node --env-file=.env src/index.ts",
     "server": "node --env-file=.env src/server.ts",
     "test": "node --test test/*.test.ts",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "carrera": "node --env-file=.env src/carrera.ts"
+
   },
   "keywords": [],
   "author": "",
