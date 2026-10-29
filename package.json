@@ -11,7 +11,9 @@
     "server": "node --env-file=.env src/server.ts",
     "test": "node --test test/*.test.ts",
     "typecheck": "tsc --noEmit",
-    "carrera": "node --env-file=.env src/carrera.ts"
+    "carrera": "node --env-file=.env src/carrera.ts",
+    
+"probar": "node src/probar.ts"
 
   },
   "keywords": [],

@@ -13,3 +13,9 @@ CREATE UNIQUE INDEX IF NOT EXISTS especialidades_nombre_unique
   nombre           text NOT NULL,
   especialidad_id  text NOT NULL REFERENCES especialidades(id) ON DELETE RESTRICT
 );
+
+CREATE TABLE IF NOT EXISTS medicos (
+  id               text PRIMARY KEY,
+  nombre           text NOT NULL,
+  especialidad_id  text NOT NULL REFERENCES especialidades(id) ON DELETE RESTRICT
+);
